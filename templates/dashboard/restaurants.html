@@ -1,0 +1,187 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block title %}Restaurants & Outlets{% endblock %}
+
+{% block content %}
+<div class="page-header d-print-none mb-4">
+  <div class="row g-2 align-items-center">
+    <div class="col">
+      <div class="page-pretitle text-secondary">Merchant Network</div>
+      <h2 class="page-title fs-1 fw-bold">Restaurants & Outlet Management</h2>
+    </div>
+    <div class="col-auto ms-auto d-print-none">
+      <div class="btn-list">
+        <a href="/docs#/11.%20Restaurant%20%26%20Owner%20Profile" target="_blank" class="btn btn-outline-primary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon me-1"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"/></svg>
+          Partner Profile API Docs
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible shadow-sm mb-3" role="alert">
+      <div class="d-flex">
+        <div>{{ message }}</div>
+      </div>
+      <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+    </div>
+  {% endfor %}
+{% endif %}
+
+<!-- Stats -->
+<div class="row row-cards mb-4">
+  <div class="col-sm-4">
+    <div class="card card-sm shadow-sm border-0">
+      <div class="card-body">
+        <div class="row align-items-center">
+          <div class="col-auto">
+            <span class="avatar avatar-md bg-primary-lt text-primary rounded">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M3 21l18 0"/><path d="M3 7v1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1h-18l2 -4h14l2 4"/><path d="M5 21l0 -10.15"/><path d="M19 21l0 -10.15"/><path d="M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4"/></svg>
+            </span>
+          </div>
+          <div class="col">
+            <div class="text-secondary fs-6 text-uppercase fw-semibold">Total Outlets</div>
+            <div class="h2 mb-0 fw-bold">{{ total_count }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="card card-sm shadow-sm border-0">
+      <div class="card-body">
+        <div class="row align-items-center">
+          <div class="col-auto">
+            <span class="avatar avatar-md bg-green-lt text-green rounded">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M7 12l5 5l10 -10"/><path d="M2 12l5 5m5 -5l5 -5"/></svg>
+            </span>
+          </div>
+          <div class="col">
+            <div class="text-secondary fs-6 text-uppercase fw-semibold">Accepting Orders (Online)</div>
+            <div class="h2 mb-0 fw-bold text-success">{{ online_count }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="card card-sm shadow-sm border-0">
+      <div class="card-body">
+        <div class="row align-items-center">
+          <div class="col-auto">
+            <span class="avatar avatar-md bg-azure-lt text-azure rounded">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><circle cx="12" cy="12" r="9"/><path d="M12 3a4.5 4.5 0 0 0 0 9a4.5 4.5 0 0 1 0 9"/></svg>
+            </span>
+          </div>
+          <div class="col">
+            <div class="text-secondary fs-6 text-uppercase fw-semibold">Active Operational Accounts</div>
+            <div class="h2 mb-0 fw-bold text-primary">{{ active_count }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Outlets Table -->
+<div class="card shadow-sm border-0">
+  <div class="card-header">
+    <h3 class="card-title fw-bold">Verified Outlets</h3>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-vcenter card-table table-hover">
+      <thead>
+        <tr>
+          <th>Outlet ID</th>
+          <th>Restaurant Name</th>
+          <th>Owner & Contact</th>
+          <th>Address</th>
+          <th>Rating</th>
+          <th>Store State</th>
+          <th>Account Status</th>
+          <th class="text-end">Controls</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for rest in restaurants %}
+        <tr>
+          <td>
+            <span class="badge bg-secondary-lt font-monospace fw-bold">{{ rest.restaurant_id }}</span>
+          </td>
+          <td>
+            <div class="d-flex align-items-center">
+              <span class="avatar avatar-sm me-2 rounded" style="background-image: url('{{ rest.logo_url }}')"></span>
+              <div>
+                <div class="fw-bold">{{ rest.name }}</div>
+                <div class="text-secondary small">FSSAI: {{ rest.fssai_number|default:"11223344556677" }}</div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="fw-semibold">{{ rest.owner_name }}</div>
+            <div class="text-secondary small">{{ rest.mobile }}</div>
+          </td>
+          <td>
+            <div class="text-truncate" style="max-width: 280px;" title="{{ rest.address }}">{{ rest.address }}</div>
+          </td>
+          <td>
+            <span class="badge bg-yellow-lt d-inline-flex align-items-center">
+              ★ {{ rest.rating }}
+            </span>
+            <span class="text-secondary small ms-1">({{ rest.total_reviews }} reviews)</span>
+          </td>
+          <td>
+            {% if rest.is_online %}
+              <span class="badge bg-green-lt d-inline-flex align-items-center">
+                <span class="status-dot status-dot-animated bg-green me-1"></span> ONLINE
+              </span>
+            {% else %}
+              <span class="badge bg-secondary-lt d-inline-flex align-items-center">
+                <span class="status-dot bg-secondary me-1"></span> OFFLINE
+              </span>
+            {% endif %}
+          </td>
+          <td>
+            {% if rest.status == 'ACTIVE' %}
+              <span class="badge bg-primary-lt">Active</span>
+            {% else %}
+              <span class="badge bg-warning-lt">Paused</span>
+            {% endif %}
+          </td>
+          <td class="text-end">
+            <div class="btn-list justify-content-end">
+              <form method="post" action="{% url 'dashboard:restaurants' %}" class="d-inline">
+                {% csrf_token %}
+                <input type="hidden" name="restaurant_id" value="{{ rest.restaurant_id }}">
+                <input type="hidden" name="action" value="toggle_online">
+                <button type="submit" class="btn btn-sm {% if rest.is_online %}btn-outline-warning{% else %}btn-outline-success{% endif %}">
+                  {% if rest.is_online %}Pause Orders{% else %}Go Online{% endif %}
+                </button>
+              </form>
+              <form method="post" action="{% url 'dashboard:restaurants' %}" class="d-inline">
+                {% csrf_token %}
+                <input type="hidden" name="restaurant_id" value="{{ rest.restaurant_id }}">
+                <input type="hidden" name="action" value="toggle_status">
+                <button type="submit" class="btn btn-sm btn-outline-secondary">
+                  {% if rest.status == 'ACTIVE' %}Suspend{% else %}Resume{% endif %}
+                </button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="8" class="text-center py-4 text-secondary">
+            No restaurant outlets found. Approve applications to activate outlets.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

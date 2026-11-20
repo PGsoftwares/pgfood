@@ -1,0 +1,202 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block title %}Live Orders Pipeline{% endblock %}
+
+{% block content %}
+<div class="page-header d-print-none mb-4">
+  <div class="row g-2 align-items-center">
+    <div class="col">
+      <div class="page-pretitle text-secondary">Kitchen & Delivery Logistics</div>
+      <h2 class="page-title fs-1 fw-bold">Live Orders Management Pipeline</h2>
+    </div>
+    <div class="col-auto ms-auto d-print-none">
+      <div class="btn-list">
+        <a href="/docs#/4.%20Orders%20Management%20Pipeline" target="_blank" class="btn btn-outline-primary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon me-1"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"/></svg>
+          Orders API Specs
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible shadow-sm mb-3" role="alert">
+      <div class="d-flex">
+        <div>{{ message }}</div>
+      </div>
+      <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+    </div>
+  {% endfor %}
+{% endif %}
+
+<!-- Pipeline Summary Pills -->
+<div class="row row-cards mb-4">
+  <div class="col-6 col-sm-4 col-lg-2">
+    <div class="card card-sm shadow-sm border-0 text-center py-2">
+      <div class="text-secondary small fw-semibold text-uppercase">New Orders</div>
+      <div class="h2 mb-0 fw-bold text-red">{{ counts.new }}</div>
+    </div>
+  </div>
+  <div class="col-6 col-sm-4 col-lg-2">
+    <div class="card card-sm shadow-sm border-0 text-center py-2">
+      <div class="text-secondary small fw-semibold text-uppercase">Preparing</div>
+      <div class="h2 mb-0 fw-bold text-warning">{{ counts.preparing }}</div>
+    </div>
+  </div>
+  <div class="col-6 col-sm-4 col-lg-2">
+    <div class="card card-sm shadow-sm border-0 text-center py-2">
+      <div class="text-secondary small fw-semibold text-uppercase">Ready for Pickup</div>
+      <div class="h2 mb-0 fw-bold text-azure">{{ counts.ready }}</div>
+    </div>
+  </div>
+  <div class="col-6 col-sm-4 col-lg-2">
+    <div class="card card-sm shadow-sm border-0 text-center py-2">
+      <div class="text-secondary small fw-semibold text-uppercase">In Transit</div>
+      <div class="h2 mb-0 fw-bold text-primary">{{ counts.out_for_delivery }}</div>
+    </div>
+  </div>
+  <div class="col-6 col-sm-4 col-lg-2">
+    <div class="card card-sm shadow-sm border-0 text-center py-2">
+      <div class="text-secondary small fw-semibold text-uppercase">Delivered</div>
+      <div class="h2 mb-0 fw-bold text-success">{{ counts.completed }}</div>
+    </div>
+  </div>
+  <div class="col-6 col-sm-4 col-lg-2">
+    <div class="card card-sm shadow-sm border-0 text-center py-2">
+      <div class="text-secondary small fw-semibold text-uppercase">Total Orders</div>
+      <div class="h2 mb-0 fw-bold">{{ counts.all }}</div>
+    </div>
+  </div>
+</div>
+
+<!-- Orders Table -->
+<div class="card shadow-sm border-0">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h3 class="card-title fw-bold">Orders Pipeline</h3>
+    <div class="btn-group" role="group">
+      <a href="{% url 'dashboard:orders' %}" class="btn btn-sm {% if not status_filter %}btn-primary{% else %}btn-outline-secondary{% endif %}">All</a>
+      <a href="{% url 'dashboard:orders' %}?status=new" class="btn btn-sm {% if status_filter == 'new' %}btn-danger{% else %}btn-outline-secondary{% endif %}">New ({{ counts.new }})</a>
+      <a href="{% url 'dashboard:orders' %}?status=preparing" class="btn btn-sm {% if status_filter == 'preparing' %}btn-warning{% else %}btn-outline-secondary{% endif %}">Preparing</a>
+      <a href="{% url 'dashboard:orders' %}?status=ready_for_pickup" class="btn btn-sm {% if status_filter == 'ready_for_pickup' %}btn-azure{% else %}btn-outline-secondary{% endif %}">Ready</a>
+      <a href="{% url 'dashboard:orders' %}?status=completed" class="btn btn-sm {% if status_filter == 'completed' %}btn-success{% else %}btn-outline-secondary{% endif %}">Delivered</a>
+    </div>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-vcenter card-table table-hover">
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>Customer</th>
+          <th>Ordered Items</th>
+          <th>Bill Amount</th>
+          <th>Payment</th>
+          <th>Delivery Partner</th>
+          <th>Pipeline Status</th>
+          <th class="text-end">Manage Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in orders %}
+        <tr>
+          <td>
+            <span class="badge bg-primary-lt font-monospace fw-bold">{{ order.order_id }}</span>
+            <div class="text-secondary small mt-1">{{ order.order_time_str }}</div>
+          </td>
+          <td>
+            <div class="fw-bold">{{ order.customer_name }}</div>
+            <div class="text-secondary small">{{ order.customer_phone }}</div>
+          </td>
+          <td>
+            <div class="small" style="max-width: 250px;">
+              {% for item in order.items %}
+                <div><span class="fw-semibold">{{ item.qty }}x</span> {{ item.name }}</div>
+              {% empty %}
+                <span class="text-secondary">Standard Order</span>
+              {% endfor %}
+            </div>
+            {% if order.instructions %}
+              <div class="text-muted fst-italic small mt-1">Note: {{ order.instructions }}</div>
+            {% endif %}
+          </td>
+          <td>
+            <div class="fw-bold">₹{{ order.amount|floatformat:2 }}</div>
+            <div class="text-secondary small">Total Bill</div>
+          </td>
+          <td>
+            <span class="badge bg-secondary-lt">{{ order.payment.type|default:"Online UPI" }}</span>
+            <div class="text-secondary small mt-1">{{ order.payment.status|default:"PAID" }}</div>
+          </td>
+          <td>
+            {% if order.delivery_partner.name %}
+              <div class="fw-semibold">{{ order.delivery_partner.name }}</div>
+              <div class="text-secondary small">OTP: <span class="font-monospace fw-bold text-primary">{{ order.pickup_otp }}</span></div>
+            {% else %}
+              <span class="text-secondary small">Not Assigned</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if order.status == 'NEW' %}
+              <span class="badge bg-red-lt d-inline-flex align-items-center">
+                <span class="status-dot status-dot-animated bg-red me-1"></span> New Order
+              </span>
+            {% elif order.status == 'PREPARING' %}
+              <span class="badge bg-warning-lt d-inline-flex align-items-center">
+                <span class="status-dot status-dot-animated bg-warning me-1"></span> Kitchen Prep
+              </span>
+            {% elif order.status == 'READY_FOR_PICKUP' %}
+              <span class="badge bg-azure-lt d-inline-flex align-items-center">
+                <span class="status-dot bg-azure me-1"></span> Ready at Counter
+              </span>
+            {% elif order.status == 'OUT_FOR_DELIVERY' %}
+              <span class="badge bg-primary-lt d-inline-flex align-items-center">
+                <span class="status-dot status-dot-animated bg-primary me-1"></span> On The Way
+              </span>
+            {% elif order.status == 'COMPLETED' %}
+              <span class="badge bg-success-lt d-inline-flex align-items-center">
+                <span class="status-dot bg-success me-1"></span> Delivered
+              </span>
+            {% else %}
+              <span class="badge bg-secondary-lt">{{ order.get_status_display }}</span>
+            {% endif %}
+          </td>
+          <td class="text-end">
+            <form method="post" action="{% url 'dashboard:orders' %}" class="d-inline">
+              {% csrf_token %}
+              <input type="hidden" name="order_id" value="{{ order.order_id }}">
+              {% if order.status == 'NEW' %}
+                <button type="submit" name="next_status" value="PREPARING" class="btn btn-sm btn-warning">
+                  Accept Order
+                </button>
+              {% elif order.status == 'PREPARING' %}
+                <button type="submit" name="next_status" value="READY_FOR_PICKUP" class="btn btn-sm btn-azure">
+                  Mark Ready
+                </button>
+              {% elif order.status == 'READY_FOR_PICKUP' %}
+                <button type="submit" name="next_status" value="OUT_FOR_DELIVERY" class="btn btn-sm btn-primary">
+                  Handover
+                </button>
+              {% elif order.status == 'OUT_FOR_DELIVERY' %}
+                <button type="submit" name="next_status" value="COMPLETED" class="btn btn-sm btn-success">
+                  Complete
+                </button>
+              {% else %}
+                <span class="text-secondary small">Finalized</span>
+              {% endif %}
+            </form>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="8" class="text-center py-4 text-secondary">
+            No orders found in the selected pipeline state.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

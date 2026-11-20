@@ -1,0 +1,155 @@
+{% extends 'layouts/auth.html' %}
+{% load static %}
+
+{% block title %}Admin Login{% endblock %}
+
+{% block content %}
+<div class="text-center mb-4">
+  <a href="." class="d-inline-flex align-items-center text-decoration-none">
+    <span class="avatar avatar-md bg-orange-lt text-orange me-2 rounded shadow-sm">
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-soup">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+        <path d="M4 11h16a1 1 0 0 1 1 1v.5c0 1.5 -2.517 5.573 -4 6.5v1a1 1 0 0 1 -1 1h-8a1 1 0 0 1 -1 -1v-1c-1.687 -1.054 -4 -5 -4 -6.5v-.5a1 1 0 0 1 1 -1z" />
+        <path d="M12 4a2.4 2.4 0 0 0 -1 2a2.4 2.4 0 0 0 1 2" />
+        <path d="M8 4a2.4 2.4 0 0 0 -1 2a2.4 2.4 0 0 0 1 2" />
+        <path d="M16 4a2.4 2.4 0 0 0 -1 2a2.4 2.4 0 0 0 1 2" />
+      </svg>
+    </span>
+    <div class="text-start">
+      <span class="h1 fw-bold mb-0 d-block text-body">PG Food</span>
+      <span class="text-secondary fs-6 text-uppercase tracking-wider">Delivery Admin Portal</span>
+    </div>
+  </a>
+</div>
+
+<div class="card card-md shadow-sm border-0">
+  <div class="card-body py-4 px-4">
+    <h2 class="h2 text-center mb-1 fw-bold">Welcome back</h2>
+    <p class="text-center text-secondary mb-4">Sign in to your food delivery administrator account</p>
+
+    <!-- Error Alerts -->
+    {% if form.non_field_errors %}
+      <div class="alert alert-danger alert-dismissible shadow-sm mb-3" role="alert">
+        <div class="d-flex">
+          <div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon alert-icon"><path d="M12 9v4"/><path d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0z"/><path d="M12 16h.01"/></svg>
+          </div>
+          <div>
+            {% for error in form.non_field_errors %}
+              <div class="text-secondary fs-5 text-danger">{{ error }}</div>
+            {% endfor %}
+          </div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endif %}
+
+    <form method="post" action="{% url 'accounts:login' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}" autocomplete="off" novalidate id="login-form">
+      {% csrf_token %}
+
+      <!-- Email Field -->
+      <div class="mb-3">
+        <label class="form-label required" for="id_email">Email address</label>
+        <div class="input-group input-group-flat">
+          <span class="input-group-text">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon text-secondary"><path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z"/><path d="M3 7l9 6l9 -6"/></svg>
+          </span>
+          {{ form.email }}
+        </div>
+        {% if form.email.errors %}
+          <div class="invalid-feedback d-block">{{ form.email.errors.0 }}</div>
+        {% endif %}
+      </div>
+
+      <!-- Password Field with Show/Hide Toggle -->
+      <div class="mb-3">
+        <label class="form-label required" for="password-field">
+          Password
+        </label>
+        <div class="input-group input-group-flat">
+          <span class="input-group-text">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon text-secondary"><circle cx="8" cy="15" r="4"/><line x1="10.85" y1="12.15" x2="19" y2="4"/><line x1="18" y1="5" x2="20" y2="7"/><line x1="15" y1="8" x2="17" y2="10"/></svg>
+          </span>
+          {{ form.password }}
+          <span class="input-group-text">
+            <a href="javascript:void(0)" class="link-secondary password-toggle-btn" id="toggle-password" title="Show password" data-bs-toggle="tooltip">
+              <!-- Eye Open SVG -->
+              <svg id="eye-open-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+              </svg>
+              <!-- Eye Off SVG -->
+              <svg id="eye-off-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon d-none">
+                <line x1="3" y1="3" x2="21" y2="21" />
+                <path d="M10.584 10.587a2 2 0 0 0 2.828 2.83" />
+                <path d="M9.363 5.365a9.466 9.466 0 0 1 2.637 -.365c4 0 7.333 2.333 10 7c-.778 1.361 -1.612 2.524 -2.503 3.488m-2.14 1.861c-1.631 1.099 -3.415 1.651 -5.357 1.651c-4 0 -7.333 -2.333 -10 -7c1.369 -2.395 2.913 -4.175 4.632 -5.341" />
+              </svg>
+            </a>
+          </span>
+        </div>
+        {% if form.password.errors %}
+          <div class="invalid-feedback d-block">{{ form.password.errors.0 }}</div>
+        {% endif %}
+      </div>
+
+      <!-- Remember Me Checkbox -->
+      <div class="mb-3">
+        <label class="form-check">
+          {{ form.remember_me }}
+          <span class="form-check-label">{{ form.remember_me.label }}</span>
+        </label>
+      </div>
+
+      <!-- Form Footer / Submit -->
+      <div class="form-footer mt-4">
+        <button type="submit" class="btn btn-primary w-100 py-2 fs-4 fw-semibold" id="btn-submit">
+          <span class="spinner-border spinner-border-sm me-2 d-none" id="submit-spinner" role="status" aria-hidden="true"></span>
+          Sign in to Dashboard
+        </button>
+      </div>
+    </form>
+  </div>
+  <div class="card-footer text-center py-3 bg-transparent border-top">
+    <div class="text-secondary small">
+      Authorized Administrator Access Only &bull; PG Food v1.0.0
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const toggleBtn = document.getElementById('toggle-password');
+    const passwordField = document.getElementById('password-field');
+    const eyeOpen = document.getElementById('eye-open-icon');
+    const eyeOff = document.getElementById('eye-off-icon');
+    const loginForm = document.getElementById('login-form');
+    const submitBtn = document.getElementById('btn-submit');
+    const submitSpinner = document.getElementById('submit-spinner');
+
+    if (toggleBtn && passwordField) {
+      toggleBtn.addEventListener('click', function () {
+        if (passwordField.type === 'password') {
+          passwordField.type = 'text';
+          eyeOpen.classList.add('d-none');
+          eyeOff.classList.remove('d-none');
+          toggleBtn.setAttribute('title', 'Hide password');
+        } else {
+          passwordField.type = 'password';
+          eyeOpen.classList.remove('d-none');
+          eyeOff.classList.add('d-none');
+          toggleBtn.setAttribute('title', 'Show password');
+        }
+      });
+    }
+
+    if (loginForm && submitBtn && submitSpinner) {
+      loginForm.addEventListener('submit', function () {
+        submitSpinner.classList.remove('d-none');
+        submitBtn.setAttribute('disabled', 'disabled');
+      });
+    }
+  });
+</script>
+{% endblock %}

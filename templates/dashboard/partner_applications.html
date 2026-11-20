@@ -1,0 +1,253 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block title %}Partner Applications{% endblock %}
+
+{% block content %}
+<div class="page-header d-print-none mb-4">
+  <div class="row g-2 align-items-center">
+    <div class="col">
+      <div class="page-pretitle text-secondary">Merchant Onboarding</div>
+      <h2 class="page-title fs-1 fw-bold">Partner Applications & Verification</h2>
+    </div>
+    <div class="col-auto ms-auto d-print-none">
+      <div class="btn-list">
+        <a href="/docs#/2.%20Partner%20Onboarding%20%26%20Registration" target="_blank" class="btn btn-outline-primary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon me-1"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"/><line x1="9" y1="9" x2="10" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
+          API Registration Docs
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible shadow-sm mb-3" role="alert">
+      <div class="d-flex">
+        <div>{{ message }}</div>
+      </div>
+      <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+    </div>
+  {% endfor %}
+{% endif %}
+
+<!-- Stats Cards -->
+<div class="row row-cards mb-4">
+  <div class="col-sm-6 col-lg-3">
+    <div class="card card-sm shadow-sm border-0">
+      <div class="card-body">
+        <div class="row align-items-center">
+          <div class="col-auto">
+            <span class="avatar avatar-md bg-blue-lt text-blue rounded">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><line x1="9" y1="12" x2="9.01" y2="12"/><line x1="13" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="9.01" y2="16"/><line x1="13" y1="16" x2="15" y2="16"/></svg>
+            </span>
+          </div>
+          <div class="col">
+            <div class="text-secondary fs-6 text-uppercase fw-semibold">Total Applications</div>
+            <div class="h2 mb-0 fw-bold">{{ total_count }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-lg-3">
+    <div class="card card-sm shadow-sm border-0">
+      <div class="card-body">
+        <div class="row align-items-center">
+          <div class="col-auto">
+            <span class="avatar avatar-md bg-warning-lt text-warning rounded">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+            </span>
+          </div>
+          <div class="col">
+            <div class="text-secondary fs-6 text-uppercase fw-semibold">Under Review</div>
+            <div class="h2 mb-0 fw-bold text-warning">{{ under_review_count }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-lg-3">
+    <div class="card card-sm shadow-sm border-0">
+      <div class="card-body">
+        <div class="row align-items-center">
+          <div class="col-auto">
+            <span class="avatar avatar-md bg-success-lt text-success rounded">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M5 12l5 5l10 -10"/></svg>
+            </span>
+          </div>
+          <div class="col">
+            <div class="text-secondary fs-6 text-uppercase fw-semibold">Approved Outlets</div>
+            <div class="h2 mb-0 fw-bold text-success">{{ approved_count }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-lg-3">
+    <div class="card card-sm shadow-sm border-0">
+      <div class="card-body">
+        <div class="row align-items-center">
+          <div class="col-auto">
+            <span class="avatar avatar-md bg-danger-lt text-danger rounded">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><circle cx="12" cy="12" r="9"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+            </span>
+          </div>
+          <div class="col">
+            <div class="text-secondary fs-6 text-uppercase fw-semibold">Rejected</div>
+            <div class="h2 mb-0 fw-bold text-danger">{{ rejected_count }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Applications Table Card -->
+<div class="card shadow-sm border-0">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h3 class="card-title fw-bold">Submitted Onboarding Applications</h3>
+    <div class="btn-group" role="group">
+      <a href="{% url 'dashboard:partner_applications' %}" class="btn btn-sm {% if not status_filter %}btn-primary{% else %}btn-outline-secondary{% endif %}">All</a>
+      <a href="{% url 'dashboard:partner_applications' %}?status=under_review" class="btn btn-sm {% if status_filter == 'under_review' %}btn-warning{% else %}btn-outline-secondary{% endif %}">Under Review</a>
+      <a href="{% url 'dashboard:partner_applications' %}?status=approved" class="btn btn-sm {% if status_filter == 'approved' %}btn-success{% else %}btn-outline-secondary{% endif %}">Approved</a>
+      <a href="{% url 'dashboard:partner_applications' %}?status=rejected" class="btn btn-sm {% if status_filter == 'rejected' %}btn-danger{% else %}btn-outline-secondary{% endif %}">Rejected</a>
+    </div>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-vcenter card-table table-hover">
+      <thead>
+        <tr>
+          <th>Application ID</th>
+          <th>Restaurant Name</th>
+          <th>Owner Details</th>
+          <th>Location</th>
+          <th>Compliance Documents</th>
+          <th>Bank Status</th>
+          <th>Status</th>
+          <th class="text-end">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for app in applications %}
+        <tr>
+          <td>
+            <span class="badge bg-blue-lt fw-bold font-monospace">{{ app.application_id }}</span>
+            <div class="text-secondary small mt-1">{{ app.submission_date|date:"d M Y, H:i" }}</div>
+          </td>
+          <td>
+            <div class="fw-bold">{{ app.restaurant_name|default:"Pending Details" }}</div>
+            <div class="text-secondary small">{{ app.cuisines|default:"Indian" }}</div>
+          </td>
+          <td>
+            <div class="fw-semibold">{{ app.owner_name }}</div>
+            <div class="text-secondary small">
+              <span class="me-2">{{ app.mobile_number }}</span>
+              <span>{{ app.email }}</span>
+            </div>
+          </td>
+          <td>
+            <div>{{ app.area|default:"Koramangala" }}, {{ app.city|default:"Bangalore" }}</div>
+            <div class="text-secondary small">{{ app.pincode|default:"560095" }}</div>
+          </td>
+          <td>
+            <div class="small">
+              <span class="badge bg-secondary-lt">PAN: {{ app.pan_number|default:"Verified" }}</span>
+              <span class="badge bg-secondary-lt mt-1">FSSAI: {{ app.fssai_number|default:"Verified" }}</span>
+            </div>
+          </td>
+          <td>
+            <span class="badge bg-green-lt">{{ app.bank_status|default:"VERIFIED" }}</span>
+            <div class="text-secondary small mt-1">{{ app.bank_name|default:"HDFC Bank" }}</div>
+          </td>
+          <td>
+            {% if app.status == 'APPROVED' %}
+              <span class="badge bg-success-lt d-inline-flex align-items-center">
+                <span class="status-dot bg-success me-1"></span> Approved
+              </span>
+            {% elif app.status == 'REJECTED' %}
+              <span class="badge bg-danger-lt d-inline-flex align-items-center">
+                <span class="status-dot bg-danger me-1"></span> Rejected
+              </span>
+            {% else %}
+              <span class="badge bg-warning-lt d-inline-flex align-items-center">
+                <span class="status-dot status-dot-animated bg-warning me-1"></span> Under Review
+              </span>
+            {% endif %}
+          </td>
+          <td class="text-end">
+            <div class="btn-list justify-content-end">
+              <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modal-{{ app.application_id }}">
+                Review & Verify
+              </button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Review Modal -->
+        <div class="modal modal-blur fade" id="modal-{{ app.application_id }}" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Verification Review: {{ app.application_id }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <form method="post" action="{% url 'dashboard:partner_applications' %}">
+                {% csrf_token %}
+                <input type="hidden" name="application_id" value="{{ app.application_id }}">
+                <div class="modal-body">
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label class="form-label text-secondary small">Restaurant Name</label>
+                      <div class="fw-bold">{{ app.restaurant_name }}</div>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label text-secondary small">Owner Name & Contact</label>
+                      <div class="fw-bold">{{ app.owner_name }} ({{ app.mobile_number }})</div>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label text-secondary small">FSSAI License</label>
+                      <div class="font-monospace">{{ app.fssai_number|default:"11223344556677" }}</div>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label text-secondary small">PAN / GST Details</label>
+                      <div class="font-monospace">{{ app.pan_number|default:"ABCDE1234F" }} / {{ app.gst_number|default:"29ABCDE1234F1Z5" }}</div>
+                    </div>
+                    <div class="col-md-12">
+                      <label class="form-label text-secondary small">Bank Account</label>
+                      <div>{{ app.bank_name }} - {{ app.account_number }} (IFSC: {{ app.ifsc_code }})</div>
+                    </div>
+                    <div class="col-12 mt-3">
+                      <label class="form-label fw-bold">Compliance Admin Remarks</label>
+                      <textarea class="form-control" name="admin_remarks" rows="2" placeholder="e.g. All documents verified successfully by compliance team.">{{ app.admin_remarks }}</textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                  <button type="submit" name="action" value="reject" class="btn btn-outline-danger">
+                    Reject Application
+                  </button>
+                  <div class="btn-list">
+                    <button type="button" class="btn btn-link link-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" name="action" value="approve" class="btn btn-success">
+                      Approve & Activate Restaurant
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        {% empty %}
+        <tr>
+          <td colspan="8" class="text-center py-4 text-secondary">
+            No partner onboarding applications found for the selected filter.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

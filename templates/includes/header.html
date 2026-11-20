@@ -1,0 +1,142 @@
+{% load static %}
+<header class="navbar navbar-expand-md d-none d-lg-flex d-print-none border-bottom">
+  <div class="container-xl">
+    <!-- Breadcrumbs -->
+    <div class="d-none d-md-flex align-items-center">
+      <ol class="breadcrumb breadcrumb-arrows mb-0" aria-label="breadcrumbs">
+        <li class="breadcrumb-item">
+          <a href="{% url 'dashboard:index' %}" class="d-flex align-items-center text-secondary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon me-1"><path d="M5 12l-2 0l9 -9l9 9l-2 0"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"/><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"/></svg>
+            Home
+          </a>
+        </li>
+        {% if active_tab == 'profile' %}
+          <li class="breadcrumb-item"><a href="{% url 'dashboard:index' %}">Settings</a></li>
+          <li class="breadcrumb-item active" aria-current="page"><a href="#">My Profile</a></li>
+        {% elif active_tab == 'security' %}
+          <li class="breadcrumb-item"><a href="{% url 'dashboard:index' %}">Settings</a></li>
+          <li class="breadcrumb-item active" aria-current="page"><a href="#">Change Password</a></li>
+        {% else %}
+          <li class="breadcrumb-item active" aria-current="page"><a href="#">Dashboard</a></li>
+        {% endif %}
+      </ol>
+    </div>
+
+    <!-- Right Side Navigation Controls -->
+    <div class="navbar-nav flex-row order-md-last ms-auto align-items-center">
+      <!-- FastAPI Swagger Link Pill Button -->
+      <div class="nav-item me-2 d-none d-sm-block">
+        <a href="/docs" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill shadow-sm d-flex align-items-center px-3" title="Open Interactive FastAPI Swagger Documentation" data-bs-toggle="tooltip" data-bs-placement="bottom">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon me-1"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"/><line x1="9" y1="9" x2="10" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
+          <span class="fw-semibold">Swagger API</span>
+          <span class="badge bg-green text-white ms-2 py-0 px-1 rounded-pill" style="font-size: 0.65rem;">v1</span>
+        </a>
+      </div>
+
+      <!-- Search Icon (Visual Placeholder) -->
+      <div class="nav-item me-2">
+        <a href="javascript:void(0)" class="nav-link px-2 text-secondary" title="Search" data-bs-toggle="tooltip">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-search">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <circle cx="10" cy="10" r="7" />
+            <line x1="21" y1="21" x2="15" y2="15" />
+          </svg>
+        </a>
+      </div>
+
+      <!-- Notification Icon (Visual Placeholder with Dropdown) -->
+      <div class="nav-item dropdown me-2">
+        <a href="javascript:void(0)" class="nav-link px-2 text-secondary position-relative" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-bell">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" />
+            <path d="M9 17v1a3 3 0 0 0 6 0v-1" />
+          </svg>
+          <span class="badge bg-red badge-blink position-absolute top-1 end-1 p-1 rounded-circle" style="width: 8px; height: 8px;"></span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-end dropdown-menu-card shadow-sm" style="min-width: 300px;">
+          <div class="card">
+            <div class="card-header d-flex align-items-center justify-content-between py-2">
+              <h3 class="card-title fs-5 mb-0">System Notifications</h3>
+              <span class="badge bg-primary-lt">3 New</span>
+            </div>
+            <div class="list-group list-group-flush list-group-hoverable">
+              <div class="list-group-item py-2">
+                <div class="row align-items-center">
+                  <div class="col-auto"><span class="status-dot status-dot-animated bg-green d-block"></span></div>
+                  <div class="col text-truncate">
+                    <span class="text-body fw-bold d-block fs-5">PG Food Platform Online</span>
+                    <div class="text-secondary fs-6 text-truncate">PostgreSQL database connected & running smoothly.</div>
+                  </div>
+                </div>
+              </div>
+              <div class="list-group-item py-2">
+                <div class="row align-items-center">
+                  <div class="col-auto"><span class="status-dot bg-blue d-block"></span></div>
+                  <div class="col text-truncate">
+                    <span class="text-body fw-bold d-block fs-5">Phase 1 Initialized</span>
+                    <div class="text-secondary fs-6 text-truncate">Admin auth and dashboard services active.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- One-Click Professional Dark / Light Theme Toggle (Rounded Corner Button with Shadow) -->
+      <div class="nav-item me-3">
+        <!-- In Light Mode: Shows Moon icon, clicking activates Dark Mode -->
+        <button type="button" class="btn btn-icon btn-outline-secondary rounded-3 shadow-sm hide-theme-dark theme-toggle-btn" title="Switch to Dark Mode" data-bs-toggle="tooltip" data-bs-placement="bottom" aria-label="Switch to Dark Mode">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-moon">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+          </svg>
+        </button>
+        <!-- In Dark Mode: Shows Sun icon with gold accent, clicking activates Light Mode -->
+        <button type="button" class="btn btn-icon btn-outline-secondary rounded-3 shadow-sm hide-theme-light theme-toggle-btn" title="Switch to Light Mode" data-bs-toggle="tooltip" data-bs-placement="bottom" aria-label="Switch to Light Mode">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-sun text-warning">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+            <path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Admin Profile Dropdown -->
+      <div class="nav-item dropdown">
+        <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
+          {% if request.user.avatar_url %}
+            <span class="avatar avatar-sm rounded-circle shadow-sm" style="background-image: url('{{ request.user.avatar_url }}')"></span>
+          {% else %}
+            <span class="avatar avatar-sm rounded-circle avatar-initials shadow-sm">{{ request.user.initials }}</span>
+          {% endif %}
+          <div class="d-none d-xl-block ps-2 text-start">
+            <div class="fw-bold">{{ request.user.full_name }}</div>
+            <div class="mt-1 small text-secondary fs-6">{{ request.user.display_role }}</div>
+          </div>
+        </a>
+        <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow shadow-sm">
+          <div class="dropdown-header">
+            <h6 class="text-body mb-0">{{ request.user.full_name }}</h6>
+            <small class="text-secondary">{{ request.user.email }}</small>
+          </div>
+          <div class="dropdown-divider"></div>
+          <a href="{% url 'accounts:profile' %}" class="dropdown-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon me-2 text-secondary"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="10" r="3"/><path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855"/></svg>
+            My Profile
+          </a>
+          <a href="{% url 'accounts:change_password' %}" class="dropdown-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon me-2 text-secondary"><circle cx="8" cy="15" r="4"/><line x1="10.85" y1="12.15" x2="19" y2="4"/><line x1="18" y1="5" x2="20" y2="7"/><line x1="15" y1="8" x2="17" y2="10"/></svg>
+            Change Password
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#logoutModal">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon me-2 text-danger"><path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"/><path d="M9 12h12l-3 -3"/><path d="M18 15l3 -3"/></svg>
+            Logout
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,81 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>{% block title %}Dashboard{% endblock %} - PG Food Delivery</title>
+
+    <!-- Theme Initialization to Prevent Flash of Unstyled Content -->
+    <script>
+      (function() {
+        var theme = localStorage.getItem('tabler-theme') || localStorage.getItem('tabler-theme-mode');
+        if (!theme) {
+          theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        if (theme === 'dark') {
+          document.documentElement.setAttribute('data-bs-theme', 'dark');
+        } else {
+          document.documentElement.removeAttribute('data-bs-theme');
+        }
+      })();
+    </script>
+
+    <!-- Tabler Pro Stylesheets -->
+    <link href="{% static 'tabler/dist/css/tabler.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'tabler/dist/css/tabler-flags.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'tabler/dist/css/tabler-payments.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'tabler/dist/css/tabler-vendors.min.css' %}" rel="stylesheet" />
+
+    <!-- Custom System Stylesheet -->
+    <link href="{% static 'css/admin-custom.css' %}" rel="stylesheet" />
+
+    <!-- Custom Fonts: Inter -->
+    <style>
+      @import url("https://rsms.me/inter/inter.css");
+      :root {
+        --tblr-font-sans-serif: 'Inter', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+      }
+    </style>
+
+    {% block extra_css %}{% endblock %}
+  </head>
+  <body class="layout-fluid">
+    <!-- Tabler Theme Initialization Script -->
+    <script src="{% static 'tabler/dist/js/tabler-theme.min.js' %}"></script>
+
+    <div class="page">
+      <!-- Sidebar -->
+      {% include 'includes/sidebar.html' %}
+
+      <!-- Top Navigation -->
+      {% include 'includes/header.html' %}
+
+      <!-- Main Page Content Wrapper -->
+      <div class="page-wrapper">
+        <div class="page-body">
+          <div class="container-xl">
+            {% block content %}{% endblock %}
+          </div>
+        </div>
+
+        <!-- Footer -->
+        {% include 'includes/footer.html' %}
+      </div>
+    </div>
+
+    <!-- Modals & Toasts -->
+    {% include 'includes/logout_modal.html' %}
+    {% include 'includes/toast_messages.html' %}
+
+    <!-- Tabler Core JS -->
+    <script src="{% static 'tabler/dist/js/tabler.min.js' %}"></script>
+    <!-- ApexCharts Library from Tabler Dist -->
+    <script src="{% static 'tabler/dist/libs/apexcharts/dist/apexcharts.min.js' %}"></script>
+    <!-- Theme Manager -->
+    <script src="{% static 'js/theme-manager.js' %}"></script>
+
+    {% block extra_js %}{% endblock %}
+  </body>
+</html>

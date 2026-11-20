@@ -1,0 +1,190 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+<div class="page-header d-print-none mb-4">
+  <div class="row g-2 align-items-center">
+    <div class="col">
+      <div class="page-pretitle text-secondary">Account Settings</div>
+      <h2 class="page-title fs-1 fw-bold">Admin Profile</h2>
+    </div>
+  </div>
+</div>
+
+<div class="card shadow-sm border-0">
+  <div class="row g-0">
+    <!-- Profile Sidebar Navigation -->
+    <div class="col-12 col-md-3 border-end">
+      <div class="card-body">
+        <h4 class="subheader">Settings Menu</h4>
+        <div class="list-group list-group-transparent">
+          <a href="{% url 'accounts:profile' %}" class="list-group-item list-group-item-action d-flex align-items-center active">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon me-2 text-primary"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="10" r="3"/><path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855"/></svg>
+            Profile Details
+          </a>
+          <a href="{% url 'accounts:change_password' %}" class="list-group-item list-group-item-action d-flex align-items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon me-2 text-secondary"><circle cx="8" cy="15" r="4"/><line x1="10.85" y1="12.15" x2="19" y2="4"/><line x1="18" y1="5" x2="20" y2="7"/><line x1="15" y1="8" x2="17" y2="10"/></svg>
+            Change Password
+          </a>
+          <a href="#theme-settings-section" class="list-group-item list-group-item-action d-flex align-items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon me-2 text-secondary"><path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/><path d="M3 12h1m8 -9v1m8 8h1m-9 8v1"/></svg>
+            Theme Preferences
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Profile Details Form Area -->
+    <div class="col-12 col-md-9 d-flex flex-column">
+      <form method="post" action="{% url 'accounts:profile' %}" enctype="multipart/form-data" novalidate id="profile-form">
+        {% csrf_token %}
+        <div class="card-body p-4">
+          <h2 class="mb-4 fw-bold">Personal Information</h2>
+
+          <!-- Avatar Section -->
+          <h3 class="card-title mb-3">Profile Picture</h3>
+          <div class="row align-items-center mb-4">
+            <div class="col-auto">
+              {% if request.user.avatar_url %}
+                <span class="avatar avatar-xl rounded-circle shadow-sm" id="avatar-preview" style="background-image: url('{{ request.user.avatar_url }}')"></span>
+              {% else %}
+                <span class="avatar avatar-xl rounded-circle avatar-initials shadow-sm fs-1" id="avatar-preview">{{ request.user.initials }}</span>
+              {% endif %}
+            </div>
+            <div class="col">
+              <div class="d-flex flex-wrap gap-2">
+                <label for="profile-image-input" class="btn btn-outline-primary mb-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon me-1"><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"/><polyline points="7 9 12 4 17 9"/><line x1="12" y1="4" x2="12" y2="16"/></svg>
+                  Upload New Photo
+                </label>
+                {{ form.profile_image }}
+                
+                {% if request.user.profile_image %}
+                  <button type="submit" name="action" value="delete_avatar" class="btn btn-ghost-danger" onclick="return confirm('Are you sure you want to remove your profile photo?');">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon me-1"><path d="M4 7l16 0"/><path d="M10 11l0 6"/><path d="M14 11l0 6"/><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"/><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"/></svg>
+                    Delete Photo
+                  </button>
+                {% endif %}
+              </div>
+              <div class="text-secondary small mt-2">Accepted formats: JPG, PNG, WEBP. Max file size: 5MB.</div>
+              {% if form.profile_image.errors %}
+                <div class="text-danger small mt-1">{{ form.profile_image.errors.0 }}</div>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="hr-text my-4">Contact & Identity</div>
+
+          <div class="row g-3">
+            <!-- Full Name -->
+            <div class="col-md-6">
+              <label class="form-label required" for="{{ form.full_name.id_for_label }}">Full Name</label>
+              {{ form.full_name }}
+              {% if form.full_name.errors %}
+                <div class="invalid-feedback d-block">{{ form.full_name.errors.0 }}</div>
+              {% endif %}
+            </div>
+
+            <!-- Email Address -->
+            <div class="col-md-6">
+              <label class="form-label required" for="{{ form.email.id_for_label }}">Email Address</label>
+              {{ form.email }}
+              {% if form.email.errors %}
+                <div class="invalid-feedback d-block">{{ form.email.errors.0 }}</div>
+              {% endif %}
+            </div>
+
+            <!-- Mobile Number -->
+            <div class="col-md-6">
+              <label class="form-label" for="{{ form.mobile_number.id_for_label }}">Mobile Number</label>
+              {{ form.mobile_number }}
+              {% if form.mobile_number.errors %}
+                <div class="invalid-feedback d-block">{{ form.mobile_number.errors.0 }}</div>
+              {% endif %}
+            </div>
+
+            <!-- Assigned Role (Read-only) -->
+            <div class="col-md-6">
+              <label class="form-label">System Role</label>
+              <input type="text" class="form-control" value="{{ request.user.display_role }}" disabled readonly />
+              <div class="form-text">Administrator roles are managed by Super Administrators.</div>
+            </div>
+          </div>
+
+          <!-- Account Meta Information -->
+          <div class="card card-sm bg-body-tertiary border-0 mt-4">
+            <div class="card-body py-3">
+              <div class="row text-secondary small">
+                <div class="col-sm-6">
+                  <span class="fw-semibold">Account Created:</span> {{ request.user.created_date|date:"d M Y, h:i A" }}
+                </div>
+                <div class="col-sm-6 text-sm-end mt-2 mt-sm-0">
+                  <span class="fw-semibold">Last Login:</span> {{ request.user.last_login|date:"d M Y, h:i A"|default:"First Session" }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Theme Settings Section Anchor -->
+          <div class="hr-text my-4" id="theme-settings-section">Appearance & Theme</div>
+          <div class="mb-3">
+            <label class="form-label">Theme Mode</label>
+            <div class="row g-2">
+              <div class="col-6">
+                <button type="button" class="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center py-2" data-set-theme="light">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon me-2 text-warning"><circle cx="12" cy="12" r="4"/><path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7"/></svg>
+                  Light Mode
+                </button>
+              </div>
+              <div class="col-6">
+                <button type="button" class="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center py-2" data-set-theme="dark">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon me-2 text-info"><path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z"/></svg>
+                  Dark Mode
+                </button>
+              </div>
+            </div>
+            <div class="form-text">Click to switch theme instantly. Changes are saved automatically across all pages.</div>
+          </div>
+        </div>
+
+        <div class="card-footer bg-transparent border-top mt-auto py-3 px-4">
+          <div class="btn-list justify-content-end">
+            <a href="{% url 'dashboard:index' %}" class="btn btn-outline-secondary">Back to Dashboard</a>
+            <button type="submit" class="btn btn-primary">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon me-1"><path d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2"/><circle cx="12" cy="14" r="2"/><polyline points="14 4 14 8 8 8 8 4"/></svg>
+              Save Profile Changes
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const fileInput = document.getElementById("profile-image-input");
+  const avatarPreview = document.getElementById("avatar-preview");
+
+  if (fileInput && avatarPreview) {
+    // Hide default file input button if wrapped with custom label
+    fileInput.style.display = 'none';
+
+    fileInput.addEventListener("change", function () {
+      if (this.files && this.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          avatarPreview.style.backgroundImage = `url('${e.target.result}')`;
+          avatarPreview.textContent = "";
+        };
+        reader.readAsDataURL(this.files[0]);
+      }
+    });
+  }
+});
+</script>
+{% endblock %}

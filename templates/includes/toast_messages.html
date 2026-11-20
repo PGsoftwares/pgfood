@@ -1,0 +1,30 @@
+{% if messages %}
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1090;">
+  {% for message in messages %}
+    <div class="toast show align-items-center border-0 shadow-lg mb-2" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="5000">
+      <div class="card card-sm mb-0">
+        <div class="card-status-top {% if message.tags == 'error' %}bg-danger{% elif message.tags == 'success' %}bg-success{% elif message.tags == 'warning' %}bg-warning{% else %}bg-info{% endif %}"></div>
+        <div class="card-body py-2 px-3 d-flex align-items-center">
+          <span class="me-2">
+            {% if message.tags == 'error' %}
+              <!-- Error SVG -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon text-danger"><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/><path d="M12 9v4"/><path d="M12 16v.01"/></svg>
+            {% elif message.tags == 'success' %}
+              <!-- Success SVG -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon text-success"><path d="M5 12l5 5l10 -10"/></svg>
+            {% elif message.tags == 'warning' %}
+              <!-- Warning SVG -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon text-warning"><path d="M12 9v4"/><path d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0z"/><path d="M12 16h.01"/></svg>
+            {% else %}
+              <!-- Info SVG -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon text-info"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"/><path d="M12 9h.01"/><path d="M11 12h1v4h1"/></svg>
+            {% endif %}
+          </span>
+          <div class="flex-fill text-body fs-5 pe-2">{{ message }}</div>
+          <button type="button" class="btn-close ms-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+{% endif %}

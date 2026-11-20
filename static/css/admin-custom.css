@@ -1,0 +1,119 @@
+/* PG Food Delivery Admin - Custom Stylesheet */
+
+:root {
+    --pgfood-brand: #ff5722;
+    --pgfood-brand-hover: #f4511e;
+}
+
+/* Ensure smooth theme transitions */
+body {
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Toast container positioning */
+.toast-container {
+    position: fixed;
+    top: 1.5rem;
+    right: 1.5rem;
+    z-index: 1080;
+}
+
+/* Custom Avatar Initials Fallback */
+.avatar-initials {
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+    background-color: rgba(32, 107, 196, 0.15);
+    color: var(--tblr-primary, #206bc4);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+[data-bs-theme="dark"] .avatar-initials {
+    background-color: rgba(32, 107, 196, 0.35);
+    color: #5ea2ff;
+}
+
+/* Status badges enhancement */
+.badge-soft-success {
+    background-color: rgba(47, 179, 68, 0.12);
+    color: #2fb344;
+}
+.badge-soft-warning {
+    background-color: rgba(245, 159, 0, 0.12);
+    color: #f59f00;
+}
+.badge-soft-danger {
+    background-color: rgba(214, 57, 57, 0.12);
+    color: #d63939;
+}
+.badge-soft-primary {
+    background-color: rgba(32, 107, 196, 0.12);
+    color: #206bc4;
+}
+
+/* One-Click Theme Toggle Button (Rounded Corner with Shadow) */
+.theme-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px !important;
+    border: 1px solid var(--tblr-border-color, #e6e8eb);
+    background-color: var(--tblr-bg-surface, #ffffff);
+    color: var(--tblr-body-color, #1e293b);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    user-select: none;
+    padding: 0;
+}
+
+[data-bs-theme="dark"] .theme-toggle-btn {
+    border-color: rgba(255, 255, 255, 0.12);
+    background-color: var(--tblr-bg-surface, #182433);
+    color: #f1f5f9;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35) !important;
+}
+
+.theme-toggle-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12) !important;
+    border-color: var(--tblr-primary, #206bc4);
+    color: var(--tblr-primary, #206bc4);
+}
+
+[data-bs-theme="dark"] .theme-toggle-btn:hover {
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5) !important;
+    border-color: #5ea2ff;
+    color: #5ea2ff;
+}
+
+.theme-toggle-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Password toggle pointer */
+.password-toggle-btn {
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Ensure ApexCharts container fits cleanly */
+.chart-container-responsive {
+    min-height: 280px;
+    width: 100%;
+}
+
+/* Sidebar Future Module Badges */
+.nav-link-badge-soon {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.45rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-left: auto;
+    opacity: 0.8;
+}
